@@ -1,0 +1,16 @@
+trace:
+  service_name: example
+  agent_host: localhost
+  agent_port: 6831
+  sampling_rate: 1
+log:
+  writer: os.Stdout
+  level: DEBUG
+gin:
+  listen_addr: 80
+  trace_enabled: true
+  metrics_enabled: true
+grpc:
+  listen_addr: 9999
+  trace_enabled: true
+  metrics_enabled: true
