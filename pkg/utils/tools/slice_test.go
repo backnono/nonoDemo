@@ -87,3 +87,19 @@ func Test_SliceDifference(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func Test_IndexOf(t *testing.T) {
+	input := []int{1, 2, 3, 4, 5, 6}
+	fi := func(value int) bool {
+		return value > 3
+	}
+	fmt.Println(IndexOf(input, fi))
+}
+
+func Test_LastIndexOf(t *testing.T) {
+	input := []int{1, 2, 3, 4, 5, 6}
+	fi := func(value int) bool {
+		return value > 3
+	}
+	fmt.Println(LastIndexOf(input, fi))
+}

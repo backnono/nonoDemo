@@ -80,3 +80,27 @@ func SliceDifference[T comparable](a []T, b []T, compareFunc func(x, y T) bool) 
 	}
 	return result
 }
+
+// IndexOf 在集合collection中查找满足predicate条件的第一个元素,并返回其索引
+func IndexOf[T comparable](collection []T, predicate func(T) bool) int {
+	for i, t := range collection {
+		if predicate(t) {
+			return i
+		}
+	}
+
+	return -1
+}
+
+// LastIndexOf 在集合collection中从后向前查找满足predicate条件的第一个元素,并返回其索引
+func LastIndexOf[T comparable](collection []T, predicate func(T) bool) int {
+	l := len(collection)
+
+	for i := l - 1; i >= 0; i-- {
+		if predicate(collection[i]) {
+			return i
+		}
+	}
+
+	return -1
+}
