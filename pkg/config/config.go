@@ -10,6 +10,8 @@ import (
 	"nonoDemo/pkg/utils/observability/mysql"
 	"nonoDemo/pkg/utils/observability/redis"
 	"nonoDemo/pkg/utils/observability/tracing"
+	"os"
+	"strconv"
 )
 
 type Config struct {
@@ -29,6 +31,18 @@ func (cfg *Config) Hook(v *viper.Viper) {
 	if env == "" {
 		env = "dev"
 	}
+	//Mysql
+	cfg.Database.Host = os.Getenv("MYSQL_HOST")
+	cfg.Database.User = os.Getenv("MYSQL_USER")
+	cfg.Database.Port = os.Getenv("MYSQL_PORT")
+	cfg.Database.Password = os.Getenv("MYSQL_PASSWORD")
+
+	//Redis
+	cfg.Redis.Host = os.Getenv("REDIS_HOST")
+	port, _ := strconv.Atoi(os.Getenv("REDIS_PORT"))
+	cfg.Redis.Port = port
+	cfg.Redis.Password = os.Getenv("REDIS_PASSWORD")
+
 	cfg.Env = env
 }
 
