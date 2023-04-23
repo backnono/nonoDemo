@@ -30,3 +30,21 @@ func (b *BlogRepository) Load(ctx context.Context, id string) (res model.BlogMan
 	}
 	return blog.ToModel(), err // 将 DO（数据对象）转成 Domain 层 mode
 }
+
+func (b *BlogRepository) FindBlogByOptions(
+	options ...entity.Option,
+) ([]entity.BlogManager, int64, error) {
+	var blogs []entity.BlogManager
+	session := b.db.NewSession()
+	for _, option := range options {
+		session = option(session)
+	}
+	count, err := session.FindAndCount(&blogs)
+	if err != nil {
+		return nil, 0, err
+	}
+	if err != nil {
+		return nil, 0, err
+	}
+	return blogs, count, nil
+}
