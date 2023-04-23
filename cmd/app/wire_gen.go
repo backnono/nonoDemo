@@ -9,15 +9,18 @@ package main
 import (
 	"nonoDemo/internal/adapters/controllers"
 	"nonoDemo/internal/adapters/grpcsvc"
+	"nonoDemo/internal/application/executor"
+	"nonoDemo/internal/infrastructure/database"
 	"nonoDemo/pkg/adapters/agin"
 	"nonoDemo/pkg/adapters/grpc"
 	"nonoDemo/pkg/framework"
 	"nonoDemo/proto_gen/api/hello"
+	"xorm.io/xorm"
 )
 
 // Injectors from wire.go:
 
-func NewGrpcServer(logger framework.Logger) *grpc.Server {
+func NewGrpcServer(logger framework.Logger, dbEngine *xorm.Engine) *grpc.Server {
 	userUsecase := grpcsvc.NewUserUsecase()
 	userService := hello.NewUserService(userUsecase, logger)
 	v := ProvideGrpcServices(userService)
@@ -25,9 +28,12 @@ func NewGrpcServer(logger framework.Logger) *grpc.Server {
 	return server
 }
 
-func NewGinServer(logger framework.Logger) *agin.Server {
+func NewGinServer(logger framework.Logger, dbEngine *xorm.Engine) *agin.Server {
 	helloController := controllers.NewHelloController(logger)
-	v := ProvideController(helloController)
+	blogRepository := database.NewBlogRepository(dbEngine, logger)
+	blogOperator := executor.NewBlogOperator(blogRepository)
+	blogController := controllers.NewBlogController(logger, blogOperator)
+	v := ProvideController(helloController, blogController)
 	server := agin.NewServer(v, logger)
 	return server
 }

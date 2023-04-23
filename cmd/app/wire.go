@@ -4,14 +4,16 @@
 package main
 
 import (
+	"github.com/google/wire"
+	"xorm.io/xorm"
+
 	"nonoDemo/internal"
 	"nonoDemo/pkg/adapters/agin"
 	"nonoDemo/pkg/adapters/grpc"
-	"nonoDemo/pkg/framework" 
-	"github.com/google/wire"
+	"nonoDemo/pkg/framework"
 )
 
-func NewGrpcServer(logger framework.Logger) *grpc.Server {
+func NewGrpcServer(logger framework.Logger, dbEngine *xorm.Engine) *grpc.Server {
 	wire.Build(ProvideGrpcServices,
 		internal.Provider,
 		Provider,
@@ -19,9 +21,19 @@ func NewGrpcServer(logger framework.Logger) *grpc.Server {
 	return &grpc.Server{}
 }
 
-func NewGinServer(logger framework.Logger) *agin.Server {
-	wire.Build(ProvideController,
+func NewGinServer(logger framework.Logger, dbEngine *xorm.Engine) *agin.Server {
+	wire.Build(
+		//ViperProviderSet,
+		//DevkitProvider,
+		ProvideController,
 		internal.Provider,
 		agin.Provider)
 	return &agin.Server{}
 }
+
+/*
+var DevkitProvider = wire.NewSet(
+	config.CfgProviderSet,
+	client.NewXorm, //ORM 框架的相关组件
+	cache.Provider,
+)*/

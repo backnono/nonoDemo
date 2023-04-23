@@ -7,29 +7,38 @@ import (
 	"github.com/spf13/viper"
 )
 
+type ViperOption struct {
+	CfPath    string
+	EnvPrefix string
+}
+
 type Configuration interface {
 	Hook(v *viper.Viper)
 }
 
-func LoadConfiguration(path, envPrefix string, instance Configuration) error {
+type VConfig struct{}
+
+func (vc *VConfig) Hook(v *viper.Viper) {}
+
+func LoadConfiguration(o *ViperOption, instance Configuration) (*viper.Viper, error) {
 	v := viper.New()
 	v.SetConfigType("yaml")
-	v.SetConfigFile(path)
-	v.SetEnvPrefix(envPrefix)
+	v.SetConfigFile(o.CfPath)
+	v.SetEnvPrefix(o.EnvPrefix)
 	v.AutomaticEnv()
 	if err := v.ReadInConfig(); err != nil {
-		return CommonInternalErr.Wrap(err, "load configuration error")
+		return nil, CommonInternalErr.Wrap(err, "load configuration error")
 	}
 	envs := os.Environ()
 	for _, envPair := range envs {
-		if envPair[0:len(envPrefix)] == envPrefix {
-			_ = v.BindEnv(strings.ReplaceAll(strings.Split(envPair, "=")[0], envPrefix+"_", ""))
+		if envPair[0:len(o.EnvPrefix)] == o.EnvPrefix {
+			_ = v.BindEnv(strings.ReplaceAll(strings.Split(envPair, "=")[0], o.EnvPrefix+"_", ""))
 		}
 	}
 	if err := v.Unmarshal(instance); err != nil {
-		return CommonInternalErr.Wrap(err, "unmarshal configuration error")
+		return nil, CommonInternalErr.Wrap(err, "unmarshal configuration error")
 	}
 
 	instance.Hook(v)
-	return nil
+	return nil, nil
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/google/wire"
+
 	"nonoDemo/internal/adapters/controllers"
 	"nonoDemo/pkg/adapters/agin"
 	"nonoDemo/pkg/adapters/grpc"
@@ -16,8 +17,12 @@ func ProvideGrpcServices(userService *hello.UserService) []grpc.Instance {
 	return []grpc.Instance{userService}
 }
 
-func ProvideController(helloController *controllers.HelloController) []agin.Controller {
+func ProvideController(
+	helloController *controllers.HelloController,
+	blogController *controllers.BlogController,
+) []agin.Controller {
 	return []agin.Controller{
 		helloController,
+		blogController,
 	}
 }

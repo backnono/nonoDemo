@@ -8,6 +8,8 @@ require (
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-kit/kit v0.12.0
 	github.com/go-kit/log v0.2.1
+	github.com/go-redis/redis v6.15.9+incompatible
+	github.com/go-sql-driver/mysql v1.6.0
 	github.com/golang/protobuf v1.5.3
 	github.com/google/uuid v1.3.0
 	github.com/google/wire v0.5.0
@@ -23,6 +25,7 @@ require (
 	google.golang.org/genproto v0.0.0-20230410155749-daa745c078e1
 	google.golang.org/grpc v1.54.0
 	google.golang.org/protobuf v1.30.0
+	xorm.io/xorm v1.3.2
 )
 
 require (
@@ -37,6 +40,7 @@ require (
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.10.0 // indirect
 	github.com/goccy/go-json v0.9.7 // indirect
+	github.com/golang/snappy v0.0.4 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
@@ -56,6 +60,7 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.3.0 // indirect
+	github.com/syndtr/goleveldb v1.0.0 // indirect
 	github.com/tealeg/xlsx v1.0.5 // indirect
 	github.com/ugorji/go/codec v1.2.7 // indirect
 	golang.org/x/crypto v0.0.0-20220411220226-7b82a4e95df4 // indirect
@@ -66,4 +71,5 @@ require (
 	gopkg.in/ini.v1 v1.66.4 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
+	xorm.io/builder v0.3.11-0.20220531020008-1bd24a7dc978 // indirect
 )

@@ -14,7 +14,9 @@ const (
 )
 
 const (
-	CommonInternalErr ErrorType = 10000000
+	CommonInternalErr   ErrorType = 10000000
+	ErrorCommonDB       ErrorType = 20010100
+	DatabaseAccessError ErrorType = 20000101
 )
 
 const (

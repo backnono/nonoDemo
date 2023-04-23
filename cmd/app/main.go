@@ -1,18 +1,30 @@
 package main
 
 import (
+	"flag"
+	"os"
+	"path"
+
+	"nonoDemo/internal/infrastructure/client"
 	"nonoDemo/pkg/adapters/agin"
 	"nonoDemo/pkg/adapters/grpc"
+	"nonoDemo/pkg/config"
 	"nonoDemo/pkg/framework"
 	"nonoDemo/pkg/utils/observability/log"
 	"nonoDemo/pkg/utils/observability/metrics"
 	"nonoDemo/pkg/utils/observability/tracing"
 )
 
+var pwd, _ = os.Getwd()
+var rootdir = path.Dir(path.Dir(pwd))
+var configFile = flag.String("f", path.Join(pwd, "configs/config.yaml"), "set config file which viper will loading.")
+var envPrefix = "nonoDemo"
+
 func main() {
 	// 加载配置文件
-	cfg := Config{}
-	err := framework.LoadConfiguration("./configs/config.yaml", "", &cfg)
+	cfg := config.Config{}
+	viperOption := &framework.ViperOption{CfPath: *configFile, EnvPrefix: ""}
+	_, err := framework.LoadConfiguration(viperOption, &cfg)
 	if err != nil {
 		panic(err)
 	}
@@ -22,19 +34,23 @@ func main() {
 	meter := metrics.NewMetrics(logger)
 	// 初始化tracing
 	tracing.InitTracer(&cfg, logger)
-	
+	// 初始化xorm
+	dbEngine := client.NewXorm(cfg)
+	// TODO 初始化redis 需要时注入
+	//redisConn := cache.NewConnection(&cfg)
+
 	// 初始化gRPC-server
-	server := NewGrpcServer(logger)
+	server := NewGrpcServer(logger, dbEngine)
 	server.WithOptions(grpc.NewOptionsFromConfig(&cfg).
 		OptionTracing().
 		OptionMetrics().
 		OptionMiddleware(grpc.LogAccessMiddleware(cfg.Trace.ServiceName, logger)).
 		OptionListenAddr(":9999"),
 	)
-    // 初始化ginOption
-	ginServer := NewGinServer(logger).
+	// 初始化ginOption
+	ginServer := NewGinServer(logger, dbEngine).
 		WithOptions(agin.NewOptionsFromConfig(&cfg).
-			OptionListenAddr(":80").
+			OptionListenAddr(":8080").
 			OptionsMiddlewares(agin.LogAccessMiddleware(cfg.Trace.ServiceName, logger)).
 			OptionMetrics().
 			OptionTrace(),
@@ -53,4 +69,3 @@ func main() {
 		logger.Error("app exited", err)
 	}
 }
-    
