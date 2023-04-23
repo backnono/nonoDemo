@@ -3,6 +3,7 @@ go的基础框架
 
 ## 项目的层级目录
 * 主要的项目层级目录
+```
   ├── adapter // Adapter层，适配各种框架及协议的接入，比如：Gin，tRPC，Echo，Fiber 等
   ├── application // App层，处理Adapter层适配过后与框架、协议等无关的业务逻辑
   │   ├── consumer //（可选）处理外部消息，比如来自消息队列的事件消费
@@ -48,3 +49,4 @@ go的基础框架
     │   └── rpc
     │       ├── dataapi.go // 第三方服务访问功能封装
     │       └── dataobject.go // 第三方服务访问操作依赖的数据对象
+```
