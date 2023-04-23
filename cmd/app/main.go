@@ -6,6 +6,7 @@ import (
 	"path"
 
 	"nonoDemo/internal/infrastructure/client"
+	"nonoDemo/internal/infrastructure/database/entity"
 	"nonoDemo/pkg/adapters/agin"
 	"nonoDemo/pkg/adapters/grpc"
 	"nonoDemo/pkg/config"
@@ -38,6 +39,8 @@ func main() {
 	dbEngine := client.NewXorm(cfg)
 	// TODO 初始化redis 需要时注入
 	//redisConn := cache.NewConnection(&cfg)
+	// 初始化实现的数据持久化
+	entity.Sync(dbEngine, logger)
 
 	// 初始化gRPC-server
 	server := NewGrpcServer(logger, dbEngine)

@@ -2,8 +2,8 @@ database:
 #  host: "localhost"
 #  port: "3306"
 #  user: "root"
-#  password: "123456"
-  name: "ads-admin"
+#  password: "root"
+  name: "ads_admin"
   showsql: true
 
 redis:

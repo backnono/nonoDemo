@@ -34,6 +34,7 @@ func (b *BlogRepository) Load(ctx context.Context, id string) (res model.BlogMan
 func (b *BlogRepository) FindBlogByOptions(
 	options ...entity.Option,
 ) ([]entity.BlogManager, int64, error) {
+	b.db.ShowSQL(true)
 	var blogs []entity.BlogManager
 	session := b.db.NewSession()
 	for _, option := range options {

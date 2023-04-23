@@ -17,7 +17,7 @@ const (
 )
 
 var DBConnectFormat = map[string]string{
-	DBTypeMysql:   "%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&interpolateParams=true&parseTime=true&loc=Local",
+	DBTypeMysql:   "%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&interpolateParams=true&parseTime=true&loc=Local",
 	DBTypeSqlite3: "./training.db",
 }
 
